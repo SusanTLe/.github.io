@@ -17,19 +17,29 @@ let autoMode = false;  //for auto mode
 let hr = 0;
 let mn = 0;
 let starY,starX,starBrightness,starSpeed;
-let cloudY= 500/2;
-let cloudX=0;
+let cloudsArray = [];  
+let numClouds = 3;     
+let cloudSpeed = 0.5; 
 
 function setup() {
   createCanvas(450, 500);    
   lightGreen = color(144, 238, 144);  
   darkGreen = color(0,41,0); 
   nightColor = color(30)// nighttime sky
-  sunRiseColor = color(255, 83, 73);// 4am
+  sunRiseColor = color(205,98,152)//color(255, 83, 73);// 4am
   endSunRiseColor = color(255, 255, 0);  // 5:59am 
   midDayColor = color(135,206,250);//very light blue
   afterSunRiseColor = color(173, 216, 230); //sky blue
   sunSetColor = color(255, 102, 0);  // 12pm-6pm
+  
+  for (let i = 0; i < numClouds; i++) {
+    cloudsArray.push({
+      x: random(-100, width),     
+      y: random(200, height/2), 
+      speed: random(0.2, 1)       
+    });
+  }
+
 }
 
 function draw() {
@@ -84,12 +94,14 @@ function draw() {
 
   //sky color changing logic based on time
   if( (hr >= 4) && (hr <= 11 ) ){
-    skyColor = lerpColor(color(205,98,152), midDayColor, timeInMinutes/(11*60 + 59)); 
+    skyColor = lerpColor(sunRiseColor, afterSunRiseColor, timeInMinutes/(11*60 + 59));
+    //skyColor = lerpColor(color(205,98,152), midDayColor, timeInMinutes/(11*60 + 59)); 
   }
-  else if( (hr > 11) && (hr <= 14)) {
-    skyColor = lerpColor(midDayColor, midDayColor, timeInMinutes/(11*60 + 59)); 
+  else if( (hr > 11) && (hr <= 15)) {
+    skyColor = lerpColor(afterSunRiseColor, midDayColor, timeInMinutes/(11*60 + 59));
+    //skyColor = lerpColor(midDayColor, midDayColor, timeInMinutes/(11*60 + 59)); 
   }
-  else if( (hr >= 15) && (hr <= 18)) {
+  else if( (hr >= 16) && (hr <= 18)) {
     skyColor = lerpColor(midDayColor, color(248, 152, 128),timeInMinutes/(17*60 + 59));
   }
   else {
@@ -114,19 +126,15 @@ function draw() {
     ellipse(moonX, moonY, moonDiameter);
     stars();
   }
-   cloudX = map(timeInMinutes, 0, 24*60, 0, width);
-   cloudY = 250;
+
   
   if(timeInMinutes>= 4*60 && timeInMinutes<=19*60){
     fill(color("white"));
-    clouds(cloudX-50,cloudY);
-    clouds(cloudX+100,cloudY-100);
   }
   else{
     fill(color(105,105,105));
-    clouds(cloudX,cloudY);
-    clouds(cloudX+100,cloudY-100);
   }
+  cloudMovement();
 
   //hill color and shape
   beginShape();
@@ -174,4 +182,18 @@ function clouds(someX,someY){
   ellipse(someX+5,someY-20,70,50);
   ellipse(someX-10,someY-10,70,50);
   ellipse(someX+20,someY-10,70,50); 
+}
+
+function cloudMovement() {
+  for (let cloud of cloudsArray) {
+    cloud.x += cloud.speed;  
+
+    //when it goes off-screen
+    if (cloud.x > width + 100) {
+      cloud.x = -100;  //start from the left when off the right edge
+      cloud.y = random(100,200);  //so it doesn't overlap with hills
+    }
+
+    clouds(cloud.x, cloud.y);
+  }
 }
