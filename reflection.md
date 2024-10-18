@@ -9,5 +9,7 @@ I was suggested to add some life into the canvas with animal life, a train ridin
 - What questions (if any) do you have about this assignment?
 Does this scream "time" something when you look at it?
 
-
+- For dated addition: what has been changed?
+I added info to the README.md file and also moved the code for filling in
+ the hill color before I begin the shape for it.
 

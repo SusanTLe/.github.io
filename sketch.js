@@ -137,13 +137,6 @@ function draw() {
   cloudMovement();
 
   //hill color and shape
-  beginShape();
-  vertex(0, height);
-  for (let x = 0; x <= width; x++) {
-    let y = height - hillHeight - sin(TWO_PI * x / hillWidth) * hillHeight;
-    vertex(x, y);
-  }
-
   if (hr >= 4 && hr <= 18) {
     hillColor = lerpColor(lightGreen, color(26,102,46), map(timeInMinutes, 0, totalDayTimeMinutes, 0, 1));
   } else {
@@ -151,6 +144,12 @@ function draw() {
     hillColor = color(1,50,32);
   }
   fill(hillColor);
+  beginShape();
+  vertex(0, height);
+  for (let x = 0; x <= width; x++) {
+    let y = height - hillHeight - sin(TWO_PI * x / hillWidth) * hillHeight;
+    vertex(x, y);
+  }
   vertex(width, height);
   endShape(CLOSE);
   
