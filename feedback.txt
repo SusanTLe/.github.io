@@ -1,0 +1,19 @@
+
+10/16/2024
+
+This works, but it is a little simplistic looking. 
+
+There are a number of issues with your use of `lerpColor`. The primary problem is that you are taking the time in minutes and dividing it by 719, so as you move from 0 to 59, the largest value you generate is 0.08 so you barely transition. That is creating the big jumps as you move from one time block to the next. 
+
+You need to rethink how you set the `amt` on `lerpColor` so that it starts at 0 at the beginning of your first hour, and ends at 1 at the end of the final hour of your intervals (all of which span multiple hours).
+
+
+Some other thoughts:
+
+- I would slow down the clouds. You have a slow piece, lean into it. 
+
+- The stars really shouldn't change position. This would be too much randomness. You can make them "twinkle" by slightly varying their brightness, but I wouldn't move them. 
+
+- I would adjust your arcs for the sun and the moon slightly so that it starts and stops completely off the canvas. Right now they just wink out before they are completely gone. 
+
+- I appreciate the simple aesthetic of the hills, but I would do something to make them look a little less like a sine wave. I might bring the valley up and the second hill down a little bit to make it less regular. This might be a good place to experiment with curves instead of sweeping out sine. If you wanted to got a little further, you could have two levels of hills with slightly different colors. 
