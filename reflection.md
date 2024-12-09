@@ -11,5 +11,11 @@ Does this scream "time" something when you look at it?
 
 - For dated addition: what has been changed?
 I added info to the README.md file and also moved the code for filling in
- the hill color before I begin the shape for it.
+the hill color before I begin the shape for it.
 
+//Dated addition 12/9
+-> Adjusted the following according to feedback:
+-> Changed the stars function. Instead of random movement, the opacity now changes to give a sort of glitter effect
+-> Changed the random speeds generated for the clouds. Now they move slower
+-> Changed the way the sun and moon positions are mapped. Now they start and end off canvas before switching.
+-> Changed the sine wave hill so that one hill is lower than the other 

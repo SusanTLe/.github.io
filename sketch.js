@@ -19,7 +19,8 @@ let mn = 0;
 let starY,starX,starBrightness,starSpeed;
 let cloudsArray = [];  
 let numClouds = 3;     
-let cloudSpeed = 0.5; 
+let cloudSpeed = 0.01; 
+let starsArray = [];
 
 function setup() {
   createCanvas(450, 500);    
@@ -36,10 +37,13 @@ function setup() {
     cloudsArray.push({
       x: random(-100, width),     
       y: random(200, height/2), 
-      speed: random(0.2, 1)       
+      speed: random(0.05, 0.2)       
     });
   }
 
+  for (let i = 0; i < 200; i++) {
+    starsArray.push({ x: random(width), y: random(height) });
+  }
 }
 
 function draw() {
@@ -77,7 +81,7 @@ function draw() {
  
   if (hr >= 4 && hr <= 18) {
   //sun is above the horizon
-  sunX = map(sunMinutes, 0, totalDayTimeMinutes, 0, width);
+  sunX = map(sunMinutes, 0, totalDayTimeMinutes, 0, width + 90);
   sunY = map(sin(PI * sunMinutes / totalDayTimeMinutes), -1, 1, maxY, minY);
 } else if (hr > 18 || hr < 6) {
   sunY += 5;  //slowly move it downward out of view
@@ -121,12 +125,11 @@ function draw() {
   } 
   else {
     fill(255,255,191);
-    moonX = map(moonMinutes, 0, totalNightTimeMinutes, 0, width);
+    moonX = map(moonMinutes, 0, totalNightTimeMinutes, -100, width+40);
     moonY = map(sin(PI * moonMinutes / totalNightTimeMinutes), -1, 1, maxY, minY);
     ellipse(moonX, moonY, moonDiameter);
     stars();
   }
-
   
   if(timeInMinutes>= 4*60 && timeInMinutes<=19*60){
     fill(color("white"));
@@ -147,11 +150,18 @@ function draw() {
   beginShape();
   vertex(0, height);
   for (let x = 0; x <= width; x++) {
-    let y = height - hillHeight - sin(TWO_PI * x / hillWidth) * hillHeight;
-    vertex(x, y);
+    
+    let halfwayPoint = width / 2;
+  // moves multiplier from 1 to 1.5 as x goes from 0 to halfwayPoint
+  let multiplier = map(x, halfwayPoint, width, 1, 1.5); 
+
+  let y = height - hillHeight - sin(TWO_PI * x / hillWidth) * hillHeight * multiplier;
+  vertex(x, y);
+    
   }
   vertex(width, height);
   endShape(CLOSE);
+  
   
 
 
@@ -164,15 +174,14 @@ function keyPressed() {
   }
 }
 
-function stars(){
+
+function stars() {
   let t = random(PI);
-  for(let i = 0; i<200; i+=2){
-    starX = random(width);
-    starY = random(height/0.5);
-    starBrightness = random(100,255);
+  for (let star of starsArray) {
+    let starBrightness = random(100, 255); // twinkle effect
     fill(255, 255, 255, starBrightness);
     noStroke();
-    ellipse(starX, starY, random(0.25,3) + sin(t += 1));
+    ellipse(star.x, star.y, random(0.25, 3));
   }
 }
 
